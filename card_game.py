@@ -44,7 +44,7 @@ class Card:
             self.suits[self.suit]
         return v
 
-class Deck:
+class Deck:     #deck class define
     def __init__(self):
         self.cards = []
         for i in range(2, 15):
@@ -59,14 +59,14 @@ class Deck:
             return
         return self.cards.pop()
     
-class Player:
+class Player:   #player
     def __init__(self, name):
         self.wins = 0
         self.card = None
         self.name = name
 
 
-class Game:
+class Game:     #game class
     def __init__(self):
         name1 = input("p1 name ")
         name2 = input("p2 name ")
@@ -74,15 +74,54 @@ class Game:
         self.p1 = Player(name1)
         self.p2 = Player(name2)
 
-    def wins(self, winner):
+    def wins(self, winner):     #find win
         w = "{} wins this round"
         w = w.format(winner)
         print(w)
 
-    def draw(self, p1n, p1c, p2n, p2c):
+    def draw(self, p1n, p1c, p2n, p2c): #find Draw
         d = "{} drew {} {} drew {}"
         d = d.format(p1n,
                      p1c,
                      p2n,
                      p2c)
         print(d)
+    
+    def play_game(self):    #game play
+        cards = self.deck.cards
+        print("beginning War!")
+        while len(cards) >= 2:
+            m = "q to quit. Any " + \
+                "key to play:"
+            response = input(m)
+            if response == 'q':
+                break
+            p1c = self.deck.rm_card()
+            p2c = self.deck.rm_card()
+            p1n = self.p1.name
+            p2n = self.p2.name
+            self.draw(p1n,
+                      p1c,
+                      p2n,
+                      p2c)
+            if p1c > p2c:
+                self.p1.wins += 1
+                self.wins(self.p1.name)
+            else:
+                self.p2.wins += 1
+                self.wins(self.p2.name)
+
+        win = self.winner(self.p1,
+                         self.p2)
+        print("War is over.{} wins"
+              .format(win))
+
+    def winner(self, p1, p2):
+        if p1.wins > p2.wins:
+            return p1.name
+        if p1.wins < p2.wins:
+            return p2.name
+        return "It was a tie!"
+
+game = Game()
+game.play_game()
